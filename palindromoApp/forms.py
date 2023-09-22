@@ -1,9 +1,9 @@
 from django import forms
-from .models import Palabra
+from .models import Palindromo
 
 class PalabraForm(forms.ModelForm):
     class Meta:
-        model = Palabra
+        model = Palindromo
         fields = ['palabra']
 
     def clean_palabra(self):
