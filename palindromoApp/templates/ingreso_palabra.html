@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ingreso de Palabra</title>
+    <link rel="stylesheet" href="../static/main.css" />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+      <form
+        id="palabraForm"
+        action="{% url 'ingreso_palabra' %}"
+        method="post"
+        class="mb-4"
+      >
+        {% csrf_token %} {{ form.as_p }}
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Ingresar Palabra
+        </button>
+      </form>
+
+      <!-- Modal para mostrar el resultado -->
+      <div
+        id="resultadoModal"
+        class="fixed top-0 left-0 w-full h-full items-center justify-center bg-black bg-opacity-50"
+      >
+        <div class="bg-white p-8 rounded shadow-lg">
+          <p id="resultadoMensaje"></p>
+          <button
+            id="cerrarModal"
+            class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("palabraForm");
+        const modal = document.getElementById("resultadoModal");
+        const mensaje = document.getElementById("resultadoMensaje");
+        const cerrarModal = document.getElementById("cerrarModal");
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          fetch(this.action, {
+            method: "POST",
+            body: new FormData(this),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              mensaje.textContent = data.message;
+              modal.classList.remove("hidden");
+            });
+        });
+
+        cerrarModal.addEventListener("click", function () {
+          modal.classList.add("hidden");
+        });
+      });
+    </script>
+  </body>
+</html>
